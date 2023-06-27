@@ -1,0 +1,27 @@
+{
+  "version": "5",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1687823500154,
+      "tag": "0000_sticky_skaar",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1687825153349,
+      "tag": "0001_furry_bullseye",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1687827573731,
+      "tag": "0002_familiar_spacker_dave",
+      "breakpoints": true
+    }
+  ]
+}
