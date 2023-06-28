@@ -5,6 +5,7 @@ import {
   timestamp,
   primaryKey,
 } from "drizzle-orm/mysql-core";
+import { relations } from "drizzle-orm";
 import type { AdapterAccount } from "next-auth/adapters";
 
 export const accounts = mysqlTable(
@@ -57,3 +58,39 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   })
 );
+
+export const playerSources = mysqlTable("player_sources", {
+  id: varchar("id", { length: 20 }).primaryKey().notNull(),
+  source: varchar("source", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").onUpdateNow(),
+});
+
+export const players = mysqlTable("players", {
+  id: varchar("id", { length: 20 }).primaryKey().notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  shortname: varchar("shortname", { length: 255 }).notNull(),
+  birthDate: timestamp("birth_date", { mode: "date" }).notNull(),
+  picture: varchar("picture", { length: 255 }).notNull(),
+  clubId: varchar("club_id", { length: 20 }),
+});
+
+export const playersRelations = relations(players, ({ one }) => ({
+  club: one(clubs, { fields: [players.clubId], references: [clubs.id] }),
+  sources: one(playerSources, {
+    fields: [players.id],
+    references: [playerSources.id],
+  }),
+}));
+
+export const clubs = mysqlTable("clubs", {
+  id: varchar("id", { length: 20 }).primaryKey().notNull(),
+  name: varchar("name", { length: 255 }).notNull(),
+  shortname: varchar("shortname", { length: 255 }).notNull(),
+  acronym: varchar("acronym", { length: 5 }).notNull(),
+  picture: varchar("picture", { length: 255 }).notNull(),
+});
+
+export const clubsRelations = relations(clubs, ({ many }) => ({
+  player: many(players),
+}));
